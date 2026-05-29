@@ -10,7 +10,7 @@
 
 [TestMu AI](https://www.testmuai.com/) (Formerly LambdaTest) is the world's first full-stack AI Agentic Quality Engineering platform that empowers teams to test intelligently, smarter, and ship faster. Built for scale, it offers a full-stack testing cloud with 10K+ real devices and 3,000+ browsers. With AI-native test management, MCP servers, and agent-based automation, TestMu AI supports Selenium, Appium, Playwright, and all major frameworks. 
 
-With TestMu AI (Formerly LambdaTest), you can run your Cypress test suites across 3,000+ browser and OS combinations on the cloud using the LambdaTest Cypress CLI — with support for parallel execution, live logs, video recordings, and automated screenshots.
+With TestMu AI (Formerly LambdaTest), you can run your Cypress test suites across 3,000+ browser and OS combinations on the cloud using the TestMu AI Cypress CLI — with support for parallel execution, live logs, video recordings, and automated screenshots.
 
 - [Sign up on TestMu AI](https://www.testmuai.com/register/) (Formerly LambdaTest).
 - Follow the [TestMu AI Documentation](https://www.testmuai.com/support/docs/) for the full setup walkthrough.
@@ -30,7 +30,7 @@ git clone https://github.com/LambdaTest/lambdatest-cypress-cli && cd lambdatest-
 npm install -g lambdatest-cypress-cli
 ```
 
-Initialize your LambdaTest Cypress configuration:
+Initialize your TestMu AI Cypress configuration:
 
 ```bash
 lambdatest-cypress init
