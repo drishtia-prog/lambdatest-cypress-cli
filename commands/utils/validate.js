@@ -354,6 +354,8 @@ module.exports = validate_config = function (lt_config, validation_configs) {
     //Check for browsers and platforms
     let browsers = validation_configs.supportedBrowserAlias;
     let platforms = validation_configs.supportedPlatformAlias;
+    // DEV ONLY. The dev catalog stops at Sequoia, but the grid runs Tahoe.
+    platforms = platforms.concat(["macos tahoe", "tahoe", "macos 26.0", "macos26"]);
     for (let i = 0; i < lt_config.browsers.length; i++) {
       if (browsers.indexOf(lt_config.browsers[i].browser.toLowerCase()) == -1) {
         reject(

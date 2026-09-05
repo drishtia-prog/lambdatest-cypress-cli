@@ -55,7 +55,18 @@ module.exports = {
   CYPRESS_ENV_FILE_PATH: "cypress.env.json",
   LT_USERNAME_ENV: "LT_USERNAME",
   LT_ACCESS_KEY_ENV: "LT_ACCESS_KEY",
-  ENVS: ["stage", "beta", "prod", "preprod", "stage_new"],
+  ENVS: ["stage", "beta", "prod", "preprod", "stage_new", "dev"],
+  dev: {
+    INTEGRATION_BASE_URL: "https://api-dd-ml-dev.lambdatestinternal.com/liis",
+    BUILD_BASE_URL:
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/builds/",
+    BUILD_STOP_URL:
+      "https://api-dd-ml-dev.lambdatestinternal.com/api/v1/test/stop",
+    SESSION_URL:
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/sessions?limit=200&session_id=",
+    REPORT_URL:
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/cypress/artefacts/test/",
+  },
   prod: {
     INTEGRATION_BASE_URL: "https://api.lambdatest.com/liis",
     BUILD_BASE_URL: "https://api.lambdatest.com/automation/api/v1/builds/",
@@ -138,6 +149,7 @@ module.exports = {
     prod:"https://api-hyperexecute.lambdatest.com/sentinel/v1.0/job/"
   },
   Dashboard_URL:{
+    dev:"https://dd-ml-dev.lambdatestinternal.com/build?build=",
     stage:"https://stage-automation.lambdatestinternal.com/build?build=",
     prod:"https://automation.lambdatest.com/build?build="
   }
