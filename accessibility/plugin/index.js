@@ -115,7 +115,14 @@ const Accessibility = (on, config) => {
                 
             const accessibility_ext_path = process.env.ACCESSIBILITY_EXTENSION_PATH
         
-            launchOptions.args.push(`--load-extension=` + accessibility_ext_path)
+            // Chrome honours only the last --load-extension, so appending a second
+            // one drops the extension Cypress needs to attach to the browser.
+            const loadExtension = launchOptions.args.findIndex((a) => a.startsWith('--load-extension='))
+            if (loadExtension === -1) {
+              launchOptions.args.push(`--load-extension=` + accessibility_ext_path)
+            } else {
+              launchOptions.args[loadExtension] += ',' + accessibility_ext_path
+            }
             launchOptions.args.push('--disable-features=DisableLoadExtensionCommandLineSwitch')
               return launchOptions
             }
