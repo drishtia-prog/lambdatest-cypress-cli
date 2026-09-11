@@ -124,7 +124,6 @@ const Accessibility = (on, config) => {
               launchOptions.args[loadExtension] += ',' + accessibility_ext_path
             }
             launchOptions.args.push('--disable-features=DisableLoadExtensionCommandLineSwitch')
-            console.log('A11Y_DEBUG browser=' + browser.name + ' v' + browser.majorVersion + ' headless=' + browser.isHeadless + ' args=' + JSON.stringify(launchOptions.args))
               return launchOptions
             }
           }

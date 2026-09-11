@@ -78,15 +78,15 @@ module.exports = {
   },
   beta: {
     INTEGRATION_BASE_URL:
-      "https://api-cypdevenv22-dev.lambdatestinternal.com/liis",
+      "https://api-dd-ml-dev.lambdatestinternal.com/liis",
     BUILD_BASE_URL:
-      "https://api-cypdevenv22-dev.lambdatestinternal.com/automation/api/v1/builds/",
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/builds/",
     BUILD_STOP_URL:
-      "https://api-cypdevenv22-dev.lambdatestinternal.com/api/v1/test/stop",
+      "https://api-dd-ml-dev.lambdatestinternal.com/api/v1/test/stop",
     SESSION_URL:
-      "https://api-cypdevenv22-dev.lambdatestinternal.com/automation/api/v1/sessions?limit=200&session_id=",
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/sessions?limit=200&session_id=",
     REPORT_URL:
-      "https://api-cypdevenv22-dev.lambdatestinternal.com/automation/api/v1/cypress/artefacts/test/",
+      "https://api-dd-ml-dev.lambdatestinternal.com/automation/api/v1/cypress/artefacts/test/",
   },
 
   stage: {
