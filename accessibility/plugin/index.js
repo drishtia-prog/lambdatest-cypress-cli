@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require('path');
+const { validateExclusions } = require("./validate_exclusions.js");
 
 function getImageResolution(buffer) {
   try {
@@ -153,6 +154,10 @@ const Accessibility = (on, config) => {
       console.log(`parameter for accessibility report EXCLUDE_RULES -` + config.env.EXCLUDE_RULES)
       console.log(`parameter for accessibility report EXCLUDE_RULE_CATEGORIES -` + config.env.EXCLUDE_RULE_CATEGORIES)
       console.log(`parameter for accessibility report CYPRESS_CLI_VERSION -` + cli_version)
+
+      // Not awaited: user configs often call setupNodeEvents without await, so
+      // blocking here would return config before the check finished.
+      validateExclusions(config.env);
 
       return config;
 }
