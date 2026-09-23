@@ -1,14 +1,13 @@
 const axios = require("axios");
-const constants = require("./constants.js");
-const { createHttpsAgent } = require("./proxy_agent.js");
+const constants = require("../../commands/utils/constants.js");
+const { createHttpsAgent } = require("../../commands/utils/proxy_agent.js");
 
 const TIMEOUT_MS = 5000;
 
 const asList = (value) => (Array.isArray(value) ? value : []);
 
-// Advisory only, and never rejects: an id axe does not know excludes nothing,
-// so the scan runs either way. This only tells the user about a typo, which
-// otherwise looks identical to a rule that did not fire.
+// Advisory, never rejects: an unknown id excludes nothing, so a typo is
+// otherwise indistinguishable from a rule that did not fire.
 function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
   return new Promise(function (resolve) {
     const run_settings = lt_config["run_settings"] || {};

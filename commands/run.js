@@ -4,7 +4,7 @@ const validate = require("./utils/validate");
 const constants = require("./utils/constants.js");
 const batcher = require("./utils/batch/batcher.js");
 const validate_cli = require("./utils/validate_cli.js");
-const { validate_exclusions } = require("./utils/validate_exclusions.js");
+const { validate_exclusions } = require("../accessibility/utils/validate_exclusions.js");
 const fs = require("fs");
 const  { v4 }=require('uuid');
 
