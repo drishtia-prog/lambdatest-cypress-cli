@@ -4,6 +4,7 @@ const validate = require("./utils/validate");
 const constants = require("./utils/constants.js");
 const batcher = require("./utils/batch/batcher.js");
 const validate_cli = require("./utils/validate_cli.js");
+const { validate_exclusions } = require("./utils/validate_exclusions.js");
 const fs = require("fs");
 const  { v4 }=require('uuid');
 
@@ -70,7 +71,7 @@ module.exports = function (args) {
             .then(function (lt_config) {
               //validate the config options
               validate(lt_config, resp)
-                .then(function (cypressVersion) {
+                .then(async function (cypressVersion) {
                   /*
                   update ltconfig to contain the cypress_version
                   case 1: user passed cypress_version in run_settings, this case will work as earlier
@@ -86,6 +87,7 @@ module.exports = function (args) {
                   if (!("cypress_version" in lt_config.run_settings)){
                     lt_config.run_settings.cypress_version = cypressVersion;
                   }
+                  await validate_exclusions(lt_config, env, rejectUnauthorized);
                   batcher
                     .make_batches(lt_config)
                     .then(async function (batches) {
