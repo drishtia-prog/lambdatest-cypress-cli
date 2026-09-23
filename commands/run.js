@@ -87,7 +87,12 @@ module.exports = function (args) {
                   if (!("cypress_version" in lt_config.run_settings)){
                     lt_config.run_settings.cypress_version = cypressVersion;
                   }
-                  await validate_exclusions(lt_config, env, rejectUnauthorized);
+                  try {
+                    await validate_exclusions(lt_config, env, rejectUnauthorized);
+                  } catch (err) {
+                    console.log(err);
+                    process.exit(1);
+                  }
                   batcher
                     .make_batches(lt_config)
                     .then(async function (batches) {

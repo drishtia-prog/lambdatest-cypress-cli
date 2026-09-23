@@ -6,10 +6,17 @@ const TIMEOUT_MS = 5000;
 
 const asList = (value) => (Array.isArray(value) ? value : []);
 
-// Advisory, never rejects: an unknown id excludes nothing, so a typo is
-// otherwise indistinguishable from a rule that did not fire.
+// LAS echoes an unknown entry exactly as it was written, so this matches.
+const strip = (list, unknown) => {
+  const drop = new Set(unknown || []);
+  return list.filter((v) => !drop.has(v));
+};
+
+// Unknown entries only warn, since an id axe does not know excludes nothing.
+// An empty effective set rejects, so no build is created for a scan that can
+// report nothing.
 function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     const run_settings = lt_config["run_settings"] || {};
     const excludeRules = asList(run_settings["accessibility.excludeRules"]);
     const excludeRuleCategories = asList(
@@ -51,8 +58,21 @@ function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
           )
         );
         if (data.effectiveEmpty) {
-          console.log(
-            "Accessibility: these exclusions leave no rules to evaluate, the scan will report nothing"
+          return reject(
+            "Accessibility: these exclusions leave no rules to evaluate, remove one to run the build"
+          );
+        }
+
+        if ("accessibility.excludeRules" in run_settings) {
+          run_settings["accessibility.excludeRules"] = strip(
+            excludeRules,
+            data.unknownRules
+          );
+        }
+        if ("accessibility.excludeRuleCategories" in run_settings) {
+          run_settings["accessibility.excludeRuleCategories"] = strip(
+            excludeRuleCategories,
+            data.unknownCategories
           );
         }
         resolve();
