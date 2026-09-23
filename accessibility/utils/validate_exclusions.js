@@ -4,13 +4,30 @@ const { createHttpsAgent } = require("../../commands/utils/proxy_agent.js");
 
 const TIMEOUT_MS = 5000;
 
+// Mirrors lambda-integration-interface, which applies these before the caps are
+// built; sending the raw value would count against a scan the user is not running.
+const WCAG_VERSION_DEFAULT = "wcag21aa";
+const BEST_PRACTICE_DEFAULT = true;
+const NEEDS_REVIEW_DEFAULT = false;
+
 const asList = (value) => (Array.isArray(value) ? value : []);
+
+const asBool = (value, fallback) =>
+  typeof value === "boolean" ? value : fallback;
 
 // LAS echoes an unknown entry exactly as it was written, so this matches.
 const strip = (list, unknown) => {
   const drop = new Set(unknown || []);
   return list.filter((v) => !drop.has(v));
 };
+
+const emptyRuleSetMessage = (data) =>
+  `All ${data.byCategory + data.byRule} rules in scope for ${data.wcagDisplay} ` +
+  `were excluded by this configuration (${data.byCategory} by category, ` +
+  `${data.byRule} by rule). Include at least one rule to run an accessibility ` +
+  `scan. Remove a value from accessibility.excludeRuleCategories or ` +
+  `accessibility.excludeRules, or set accessibility=false to disable ` +
+  `accessibility scanning for this session.`;
 
 // Unknown entries only warn, since an id axe does not know excludes nothing.
 // An empty effective set rejects, so no build is created for a scan that can
@@ -21,6 +38,16 @@ function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
     const excludeRules = asList(run_settings["accessibility.excludeRules"]);
     const excludeRuleCategories = asList(
       run_settings["accessibility.excludeRuleCategories"]
+    );
+    const wcagVersion =
+      run_settings["accessibility.wcagVersion"] || WCAG_VERSION_DEFAULT;
+    const bestPractice = asBool(
+      run_settings["accessibility.bestPractice"],
+      BEST_PRACTICE_DEFAULT
+    );
+    const needsReview = asBool(
+      run_settings["accessibility.needsReview"],
+      NEEDS_REVIEW_DEFAULT
     );
 
     if (excludeRules.length === 0 && excludeRuleCategories.length === 0) {
@@ -40,7 +67,14 @@ function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
       method: "post",
       url: constants[env].ACCESSIBILITY_VALIDATE_URL,
       headers: { Authorization: "Basic " + token },
-      data: { platform: "web", excludeRules, excludeRuleCategories },
+      data: {
+        platform: "web",
+        wcagVersion,
+        bestPractice,
+        needsReview,
+        excludeRules,
+        excludeRuleCategories,
+      },
       timeout: TIMEOUT_MS,
       proxy: false,
       httpsAgent: createHttpsAgent(rejectUnauthorized !== false),
@@ -58,9 +92,7 @@ function validate_exclusions(lt_config, env = "prod", rejectUnauthorized) {
           )
         );
         if (data.effectiveEmpty) {
-          return reject(
-            "Accessibility: these exclusions leave no rules to evaluate, remove one to run the build"
-          );
+          return reject(emptyRuleSetMessage(data));
         }
 
         if ("accessibility.excludeRules" in run_settings) {
